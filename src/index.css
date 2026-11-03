@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/* 색과 글꼴은 여기서 한 번에 바꿀 수 있습니다. 포인트 컬러는 accent 하나만 사용합니다. */
+@theme {
+  --color-accent: #7a2e2e; /* 차분한 버건디 (흰 배경 대비 4.5:1 이상) */
+  --color-accent-dark: #5c2020;
+  --color-accent-soft: #f6eeee;
+  --color-ink: #1f2328;
+  --color-muted: #555b63;
+  --color-line: #e3e0da;
+  --color-paper: #fbfaf7;
+  --font-sans: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+  line-height: 1.7;
+  word-break: keep-all; /* 한국어 단어 중간에서 줄이 바뀌지 않도록 */
+  overflow-wrap: anywhere;
+}
+
+/* 키보드로 이동할 때 현재 위치가 잘 보이도록 */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 연구 본문(마크다운) 스타일 */
+.prose-body {
+  @apply font-serif text-[1.05rem] leading-8;
+}
+.prose-body h1,
+.prose-body h2,
+.prose-body h3 {
+  @apply font-serif font-semibold mt-8 mb-3;
+}
+.prose-body h1 { @apply text-2xl; }
+.prose-body h2 { @apply text-xl; }
+.prose-body h3 { @apply text-lg; }
+.prose-body p { @apply my-4; }
+.prose-body ul { @apply list-disc pl-6 my-4; }
+.prose-body ol { @apply list-decimal pl-6 my-4; }
+.prose-body li { @apply my-1; }
+.prose-body a { @apply text-accent underline underline-offset-2; }
+.prose-body blockquote { @apply border-l-4 border-line pl-4 text-muted italic my-6; }
+.prose-body code { @apply bg-accent-soft px-1 rounded text-[0.95em]; }
+.prose-body pre { @apply bg-accent-soft p-4 rounded overflow-x-auto my-4; }
+.prose-body img { @apply max-w-full h-auto; }
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+}
+@utility btn-primary {
+  @apply btn bg-accent text-white hover:bg-accent-dark;
+}
+@utility btn-outline {
+  @apply btn border border-line bg-white text-ink hover:border-accent hover:text-accent;
+}
+@utility btn-danger {
+  @apply btn border border-red-200 bg-white text-red-700 hover:bg-red-50 px-3 py-1;
+}
+@utility input {
+  @apply w-full rounded-md border border-line bg-white px-3 py-2 text-base focus:border-accent;
+}
+@utility card {
+  @apply rounded-lg border border-line bg-white p-5;
+}

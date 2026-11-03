@@ -1,0 +1,85 @@
+rules_version = '2';
+
+// Firestore 보안 규칙 초안
+// 사용법: Firebase 콘솔 → Firestore Database → 규칙(Rules) 탭에 이 파일 내용을 통째로 붙여 넣고 [게시].
+// 글자 수 제한(100 / 5000 / 1000)은 src/config/limits.ts 와 같게 유지하세요.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // ⚠️ 'ADMIN_EMAIL' 을 실제 관리자 Google 이메일로 바꾸세요. (src/config/site.ts 의 adminEmail 과 같은 값)
+    // 사용자 문서를 따로 읽어서 판별하지 않는 이유: 그렇게 하면 요청마다 읽기 횟수가 추가로 소모됩니다.
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email == 'ADMIN_EMAIL'
+        && request.auth.token.email_verified == true;
+    }
+
+    function isAuthor() {
+      return signedIn() && resource.data.authorUid == request.auth.uid;
+    }
+
+    function textOk(value, maxLen) {
+      return value is string && value.size() >= 1 && value.size() <= maxLen;
+    }
+
+    function validPost(d) {
+      return d.keys().hasOnly(['category', 'title', 'body', 'relatedKey', 'authorUid', 'authorName', 'createdAt'])
+        && d.keys().hasAll(['category', 'title', 'body', 'relatedKey', 'authorUid', 'authorName', 'createdAt'])
+        && d.category in ['research', 'course', 'free']
+        && textOk(d.title, 100)
+        && textOk(d.body, 5000)
+        && (d.relatedKey == null || textOk(d.relatedKey, 200))
+        && textOk(d.authorName, 100)
+        && d.createdAt is timestamp;
+    }
+
+    function validComment(d) {
+      return d.keys().hasOnly(['body', 'authorUid', 'authorName', 'createdAt'])
+        && d.keys().hasAll(['body', 'authorUid', 'authorName', 'createdAt'])
+        && textOk(d.body, 1000)
+        && textOk(d.authorName, 100)
+        && d.createdAt is timestamp;
+    }
+
+    // 토론 글
+    match /posts/{postId} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && validPost(request.resource.data)
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.createdAt == request.time;
+
+      // 수정: 작성자·작성 시각은 바꿀 수 없음 (현재 화면에는 수정 기능이 없지만 규칙은 미리 둠)
+      allow update: if (isAuthor() || isAdmin())
+        && validPost(request.resource.data)
+        && request.resource.data.authorUid == resource.data.authorUid
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      allow delete: if isAuthor() || isAdmin();
+
+      // 댓글 (글 아래 하위 컬렉션)
+      match /comments/{commentId} {
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && validComment(request.resource.data)
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.createdAt == request.time;
+
+        allow update: if (isAuthor() || isAdmin())
+          && validComment(request.resource.data)
+          && request.resource.data.authorUid == resource.data.authorUid
+          && request.resource.data.createdAt == resource.data.createdAt;
+
+        allow delete: if isAuthor() || isAdmin();
+      }
+    }
+
+    // 위에서 허용하지 않은 나머지는 모두 거부 (Firestore 기본 동작)
+  }
+}
