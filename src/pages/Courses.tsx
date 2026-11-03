@@ -19,7 +19,7 @@ export function Courses() {
   return (
     <>
       <PageTitle title={t.title} description={t.description} />
-      <div role="tablist" aria-label="과정 구분" className="mb-6 flex gap-2 border-b border-line">
+      <div role="tablist" aria-label="과정 구분" className="mb-8 inline-flex gap-1 rounded-full bg-sand p-1">
         {tabs.map((tab) => {
           const active = tab.level === level;
           return (
@@ -30,7 +30,7 @@ export function Courses() {
               id={`tab-${tab.level}`}
               aria-selected={active}
               aria-controls="course-panel"
-              className={`-mb-px border-b-2 px-4 py-2 ${active ? 'border-accent font-semibold text-accent' : 'border-transparent text-muted hover:text-ink'}`}
+              className={`rounded-full px-6 py-2 text-sm ${active ? 'bg-accent font-semibold text-white shadow-sm' : 'text-muted hover:text-ink'}`}
               onClick={() => setParams(tab.level === 'graduate' ? { level: 'graduate' } : {}, { replace: true })}
             >
               {tab.label}
@@ -39,14 +39,17 @@ export function Courses() {
         })}
       </div>
       <div id="course-panel" role="tabpanel" aria-labelledby={`tab-${level}`}>
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid gap-5 md:grid-cols-2">
           {list.map((c) => (
-            <li key={c.id} className="card">
-              <p className="text-sm text-muted">{c.semester}</p>
-              <h2 className="mt-1 font-serif text-lg font-semibold">
-                <Link to={`/courses/${c.id}`} className="hover:text-accent hover:underline">{c.title}</Link>
+            <li key={c.id} className="card lift group relative md:p-6">
+              <p className="flex items-center justify-between text-sm">
+                <span className="chip">{c.semester}</span>
+                <span className="font-semibold text-accent">{c.weeks.length}주차 자료</span>
+              </p>
+              <h2 className="mt-4 font-serif text-xl font-bold leading-snug">
+                <Link to={`/courses/${c.id}`} className="after:absolute after:inset-0 group-hover:text-accent">{c.title}</Link>
               </h2>
-              <p className="mt-2 line-clamp-3 text-muted">{c.overview}</p>
+              <p className="mt-3 line-clamp-3 text-muted">{c.overview}</p>
             </li>
           ))}
         </ul>

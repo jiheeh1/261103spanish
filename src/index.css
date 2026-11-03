@@ -2,13 +2,14 @@
 
 /* 색과 글꼴은 여기서 한 번에 바꿀 수 있습니다. 포인트 컬러는 accent 하나만 사용합니다. */
 @theme {
-  --color-accent: #7a2e2e; /* 차분한 버건디 (흰 배경 대비 4.5:1 이상) */
+  --color-accent: #7a2e2e; /* 차분한 버건디 (흰 배경 대비 4.5:1 이상) — 포인트 컬러는 이 하나만 */
   --color-accent-dark: #5c2020;
-  --color-accent-soft: #f6eeee;
-  --color-ink: #1f2328;
-  --color-muted: #555b63;
-  --color-line: #e3e0da;
-  --color-paper: #fbfaf7;
+  --color-accent-soft: #f6ecea;
+  --color-ink: #1c1917;
+  --color-muted: #57534e;
+  --color-line: #e7e2d9;
+  --color-sand: #f1ece2; /* 따뜻한 중립색 (배경 강조용) */
+  --color-paper: #faf8f4;
   --font-sans: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
   --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
 }
@@ -53,10 +54,10 @@ body {
 .prose-body img { @apply max-w-full h-auto; }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply inline-flex items-center justify-center gap-1 rounded-full px-5 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
 }
 @utility btn-primary {
-  @apply btn bg-accent text-white hover:bg-accent-dark;
+  @apply btn bg-accent text-white shadow-sm hover:bg-accent-dark;
 }
 @utility btn-outline {
   @apply btn border border-line bg-white text-ink hover:border-accent hover:text-accent;
@@ -68,5 +69,43 @@ body {
   @apply w-full rounded-md border border-line bg-white px-3 py-2 text-base focus:border-accent;
 }
 @utility card {
-  @apply rounded-lg border border-line bg-white p-5;
+  @apply rounded-xl border border-line bg-white p-5 shadow-[0_1px_2px_rgb(28_25_23/0.04)];
+}
+
+/* ---------- 디자인 요소 ---------- */
+
+/* 작은 윗제목(eyebrow): 제목 위의 짧은 분류 글자 */
+@utility eyebrow {
+  @apply text-xs font-bold uppercase tracking-[0.18em] text-accent;
+}
+
+/* 첫 화면(히어로): 따뜻한 배경 + 은은한 줄무늬 + 큰 장식 글자 */
+@utility hero {
+  @apply relative overflow-hidden rounded-2xl border border-line px-6 py-12 md:px-12 md:py-20;
+  background:
+    radial-gradient(60rem 30rem at 100% 0%, rgb(122 46 46 / 0.10), transparent 60%),
+    repeating-linear-gradient(135deg, rgb(122 46 46 / 0.035) 0 1px, transparent 1px 14px),
+    linear-gradient(180deg, #fff, var(--color-sand));
+}
+.hero-glyph {
+  @apply pointer-events-none absolute -right-2 -top-10 select-none font-serif font-bold text-accent/10 md:-right-4;
+  font-size: clamp(10rem, 28vw, 22rem);
+  line-height: 1;
+}
+
+/* 카드가 위로 살짝 떠오르는 효과 (움직임을 줄이는 설정을 쓰는 사람에겐 끔) */
+@utility lift {
+  @apply transition duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lift { transition: none; transform: none !important; }
+}
+
+/* 제목 아래 짧은 포인트 선 */
+@utility rule {
+  @apply block h-1 w-12 shrink-0 rounded-full bg-accent;
+}
+
+@utility chip {
+  @apply inline-block rounded-full bg-sand px-2.5 py-0.5 text-xs text-muted;
 }

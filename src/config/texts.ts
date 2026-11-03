@@ -34,8 +34,16 @@ export const texts = {
     admin: '관리자',
   },
   home: {
+    eyebrow: 'Hispanic Studies',
+    ctaResearch: '연구 둘러보기',
+    ctaDiscussion: '토론 참여하기',
     recentResearch: '최근 연구',
     recentDiscussion: '최근 토론',
+    tiles: {
+      research: { title: '연구', desc: '문학·문화·언어 연구 자료', unit: '건' },
+      courses: { title: '수업', desc: '학부·대학원 주차별 자료', unit: '개 수업' },
+      discussion: { title: '토론', desc: '질문하고 의견을 나누는 공간', unit: '' },
+    },
   },
   research: {
     title: '연구',

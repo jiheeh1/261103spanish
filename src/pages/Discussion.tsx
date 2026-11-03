@@ -39,7 +39,7 @@ export function Discussion() {
           );
         })}
       </div>
-      <div className="card py-1">
+      <div className="card px-5 py-1 md:px-8">
         {/* key를 바꿔 카테고리가 바뀌면 목록을 새로 시작 */}
         <PostList key={category ?? 'all'} category={category} />
       </div>

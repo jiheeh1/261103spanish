@@ -17,7 +17,7 @@ export function CourseDetail() {
   const backHref = course.level === 'graduate' ? '/courses?level=graduate' : '/courses';
 
   return (
-    <article>
+    <article className="mx-auto max-w-3xl">
       <Link to={backHref} className="text-sm text-accent hover:underline">← {texts.common.back}</Link>
       <p className="mt-4 text-sm text-muted">
         {course.level === 'graduate' ? t.graduate : t.undergraduate} · {course.semester}
@@ -33,13 +33,16 @@ export function CourseDetail() {
         <h2 id="weekly" className="mb-3 font-serif text-xl font-semibold">{t.weekly}</h2>
         <ol className="flex flex-col gap-3">
           {course.weeks.map((w) => (
-            <li key={w.week} className="card p-4">
+            <li key={w.week} className="card flex gap-4 p-4">
+              <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent-soft font-serif font-bold text-accent">{w.week}</span>
+              <div>
               <p className="font-medium">
-                <span className="mr-2 text-accent">{t.week(w.week)}</span>
+                <span className="sr-only">{t.week(w.week)}: </span>
                 {w.topic}
               </p>
               <div className="mt-2 text-sm">
                 {w.links.length > 0 ? <ExternalLinks links={w.links} /> : <span className="text-muted">{t.noMaterials}</span>}
+              </div>
               </div>
             </li>
           ))}

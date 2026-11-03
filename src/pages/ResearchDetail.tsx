@@ -17,14 +17,14 @@ export function ResearchDetail() {
   const key = researchKey(item.id);
 
   return (
-    <article>
+    <article className="mx-auto max-w-3xl">
       <Link to="/research" className="text-sm text-accent hover:underline">← {texts.common.back}</Link>
       <p className="mt-4 text-sm text-muted">{item.field} · {item.year}</p>
       <PageTitle title={item.title} />
 
-      <section aria-labelledby="summary" className="mb-8 rounded-lg bg-accent-soft p-5">
-        <h2 id="summary" className="mb-2 font-semibold">{t.summary}</h2>
-        <p>{item.summary}</p>
+      <section aria-labelledby="summary" className="mb-10 rounded-xl border-l-4 border-accent bg-accent-soft p-6">
+        <h2 id="summary" className="eyebrow mb-2">{t.summary}</h2>
+        <p className="font-serif text-lg leading-8">{item.summary}</p>
       </section>
 
       {/* skipHtml: 마크다운 안의 HTML 태그는 표시하지 않음 (안전을 위해) */}

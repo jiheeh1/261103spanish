@@ -60,7 +60,7 @@ export function PostDetail() {
   }
 
   return (
-    <article>
+    <article className="mx-auto max-w-3xl">
       <Link to="/discussion" className="text-sm text-accent hover:underline">← {texts.common.back}</Link>
       <p className="mt-4">
         <span className="rounded bg-accent-soft px-2 py-0.5 text-sm text-accent">{t.categories[post.category]}</span>
@@ -82,7 +82,7 @@ export function PostDetail() {
         </p>
       )}
       {/* 사용자가 쓴 본문은 HTML로 해석하지 않고 글자 그대로 보여 줌 */}
-      <div className="card whitespace-pre-wrap font-serif leading-8 md:p-8">{post.body}</div>
+      <div className="card whitespace-pre-wrap font-serif text-lg leading-9 md:p-10">{post.body}</div>
       <CommentList postId={post.id} />
     </article>
   );
