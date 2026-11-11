@@ -5,6 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # 관리자 페이지(knowledge-admin.html)의 Firebase 웹 설정은 공개용 값이라 비밀 값 검사에서 뺀다.
+  SECRETS_SCAN_OMIT_PATHS = "public/knowledge-admin.html,dist/knowledge-admin.html"
 
 # 한 페이지 앱(SPA)이라 /research/abc 같은 주소로 바로 들어와도
 # index.html을 보여 주어야 404가 나지 않습니다.
