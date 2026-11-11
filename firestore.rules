@@ -80,6 +80,21 @@ service cloud.firestore {
       }
     }
 
+    // ===== 지식 자산 관리자 페이지 (knowledge-admin.html) =====
+    // 교수님 계정만 지식 창고(knowledge_input)와 결과물(knowledge_output)을 읽고 쓴다.
+    function isKnowledgeAdmin() {
+      return signedIn()
+        && request.auth.token.email == 'jihee051124@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+
+    match /knowledge_input/{docId} {
+      allow read, write: if isKnowledgeAdmin();
+    }
+    match /knowledge_output/{docId} {
+      allow read, write: if isKnowledgeAdmin();
+    }
+
     // 위에서 허용하지 않은 나머지는 모두 거부 (Firestore 기본 동작)
   }
 }
